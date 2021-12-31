@@ -1,3 +1,9 @@
 <h1 class='text-5xl font-medium text-teal-900 pl-40 pt-10'>{{title}}</h1>
-<app-heroes></app-heroes>
+<!-- <app-heroes></app-heroes> -->
+<nav class="pl-40 mt-8"><a routerLink="/dashboard"
+        class="p-5 bg-gray-200 mr-2 hover:bg-gray-600 hover:text-white">Dashboard</a><a routerLink="/heroes"
+        class="p-5 bg-gray-200 hover:text-white hover:bg-gray-600">Heroes</a></nav>
+<!--handle route-->
+<router-outlet></router-outlet>
+<!-- <app-dashboard></app-dashboard> -->
 <app-message></app-message>
