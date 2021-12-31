@@ -1,14 +1,22 @@
-<h2 class="pl-40 text-lg pt-5">My Heroes</h2>
+<h2 class="pl-40 text-2xl pt-5">My Heroes</h2>
+<div class="flex flex-col pl-40 mt-5">
+    <label for="new-jero">Hero name: </label>
+    <input id="new-hero" #heroName class="border-2 p-2 text-sm w-1/2" />
+    <button (click)="add(heroName.value);heroName.value=''"
+        class="p-5 bg-gray-200 mr-2 hover:bg-gray-600 hover:text-white mt-5 w-28">Add Hero</button>
+</div>
 <ul class="pt-5 pl-40 w-96">
     <!-- <li *ngFor="let hero of heroes" (click)="onSelect(hero)"
         class='bg-gray-200 pl-0 p-2 w-full mb-2 cursor-pointer rounded-md hover:ml-1'
         [class.bg-gray-900]='hero===selectedHero' [class.text-white]='hero===selectedHero'>
         <span class="bg-gray-700 text-white text-sm p-3 mr-2">{{hero.id}}</span>{{hero.name}}
     </li> -->
-    <li *ngFor="let hero of heroes" class='bg-gray-200 pl-0 w-full p-2 mb-2 rounded-md hover:ml-1'>
+    <li *ngFor="let hero of heroes" class='bg-gray-200 pl-0 w-full flex justify-between p-2 mb-2 rounded-md hover:ml-1'>
         <a routerLink="/detail/{{hero.id}}" class="w-full">
             <span class="bg-gray-700 text-white text-sm p-3 mr-2">{{hero.id}}</span> {{hero.name}}
         </a>
+        <button (click)="delete(hero)" title="delete hero"
+            class="bg-white p-1 hover:bg-gray-500 hover:text-white">X</button>
     </li>
 
 </ul>
