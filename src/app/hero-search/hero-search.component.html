@@ -1,1 +1,11 @@
-<p>hero-search works!</p>
+<div class="flex flex-col pl-40 mt-5">
+    <label for="new-jero" class="font-bold text-lg">Hero Search: </label>
+    <input id="search-box" #searchBox class="border-2 p-2 text-sm w-1/2" (input)="search(searchBox.value)" />
+    <ul>
+        <li *ngFor="let hero of heroes$|async"
+            class="w-1/2 p-1.5 border-2 hover:bg-gray-800 hover:text-white cursor-pointer">
+            <!-- heroes$ is an observable with an async pipe -->
+            <a routerLink="/detail/{{hero.id}}" class="w-full h-full">{{hero.name}}</a>
+        </li>
+    </ul>
+</div>
