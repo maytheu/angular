@@ -1,4 +1,7 @@
-<div class="bg-gray-200 m-1.5 py-2.5 px-5 cursor-pointer">
-    <h3 class="flex items-center justify-between">{{task?.text}}</h3>
+<div class="bg-gray-200 m-1.5 py-2.5 px-5 cursor-pointer border-4" [class.border-l-green-500]="task?.reminder===true">
+    <h3 class="flex items-center justify-between">{{task?.text}} <fa-icon [icon]="faTimes" class="text-red-500"
+            (click)="onDelete(task)">
+        </fa-icon>
+    </h3>
     <p>{{task?.day}}</p>
 </div>
