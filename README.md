@@ -2,7 +2,7 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.1.2.
 
-You can find this app (here)[https://zen-poincare-a3ab19.netlify.app/] and the (github repo)[https://github.com/maytheu/angular/tree/todo]
+You can find this app [here](https://zen-poincare-a3ab19.netlify.app/) and the [github repo](https://github.com/maytheu/angular/tree/todo)
 
 ## Development server
 
