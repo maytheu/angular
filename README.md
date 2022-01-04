@@ -2,9 +2,13 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.1.2.
 
+You can find this app (here)[https://zen-poincare-a3ab19.netlify.app/] and the (github repo)[https://github.com/maytheu/angular/tree/todo]
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+
+Clone and install the app and run `npm run server` to start json server
 
 ## Code scaffolding
 
