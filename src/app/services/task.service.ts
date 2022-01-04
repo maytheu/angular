@@ -32,4 +32,15 @@ export class TaskService {
     const url = `${this.serverUrl}/${task?.id}`;
     return this.http.delete<Task>(url, this.httpOptions);
   }
+
+  // update reminder
+  updateTaskReminder(task: Task): Observable<Task> {
+    const url = `${this.serverUrl}/${task?.id}`;
+    return this.http.put<Task>(url, task, this.httpOptions);
+  }
+
+  // new task
+  newTask(task?: Task): Observable<Task> {
+    return this.http.post<Task>(this.serverUrl, task, this.httpOptions);
+  }
 }
