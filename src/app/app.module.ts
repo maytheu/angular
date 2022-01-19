@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -22,6 +22,7 @@ import { InputComponent } from './layout/components/input/input.component';
 import { FormArrayComponent } from './layout/components/form-array/form-array.component';
 import { FormComponent } from './layout/form/form.component';
 import { LoginComponent } from './pages/login/login.component';
+import { LoginInputsComponent } from './layout/components/form/login-inputs/login-inputs.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { LoginComponent } from './pages/login/login.component';
     FormArrayComponent,
     FormComponent,
     LoginComponent,
+    LoginInputsComponent,
   ],
   imports: [
     BrowserModule,
@@ -49,6 +51,7 @@ import { LoginComponent } from './pages/login/login.component';
     FontAwesomeModule,
     NgSelectModule,
     FormsModule,
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

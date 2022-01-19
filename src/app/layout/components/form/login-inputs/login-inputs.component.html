@@ -1,0 +1,13 @@
+<form [formGroup]="loginForm" (ngSubmit)='onLoginForm()'>
+    <p class="text-center py-6 prose prose-lg">Login Now!</p>
+    <input id='username' type='text' formControlName='username' placeholder="Type Username"
+        class="w-full  rounded-md border-gray-300" />
+    <input id='passord' type='password' formControlName='password' placeholder="Type Password"
+        class="w-full  rounded-dm border-gray-300 mt-3" />
+    <p class="text-right pb-5"><a routerLink="/forget" class="prose prose-sm text-right text-blue-300">Forget
+            Password</a>
+    </p>
+    <button type="submit" [disabled]="!loginForm.valid" [class.bg-blue-200]='!loginForm.valid'
+        [class.cursor-not-allowed]='!loginForm.valid'
+        class="w-full text-white text-center bg-blue-500 rounded-3xl py-2 my-7">Login</button>
+</form>
