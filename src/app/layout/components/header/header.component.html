@@ -1,0 +1,22 @@
+<div class="w-full h-14 sticky top-0  bg-gray-50 items-center flex sm:flex-row justify-between px-4 sm:justify-center sm:space-x-5 md:px-10 md:justify-between lg:px-20"
+    [class.border-blue-500]='!toggleMenu' [class.border-b-4]='!toggleMenu'>
+    <div class="mt-0"><a routerLink="/"><img [src]='logoPath' class="my-auto"></a></div>
+    <div class=" cursor-pointer px-2 py-1 rounded-lg sm:hidden" (click)="onToggleMenu()">
+        <div *ngFor="let bar of bars" class="w-7 h-0.5 my-1.5 bg-gray-600"></div>
+    </div>
+    <div class="sm:flex sm:bg-none" [class.hidden]='!toggleMenu' [class.absolute]='toggleMenu'
+        [class.flex-col]='toggleMenu' [class.flex]='toggleMenu' [class.z-20]='toggleMenu' [class.w-full]='toggleMenu'
+        [class.top-full]='toggleMenu' [class.left-0]='toggleMenu' [class.border-blue-500]='toggleMenu'
+        [class.border-b-4]='toggleMenu' [class.bg-gray-50]='toggleMenu'>
+        <ul class="sm:flex sm:flex-row sm:space-x-10" [class.flex-col]='toggleMenu'>
+            <li *ngFor="let menu of menus">
+                <a routerLink={{menu.link}} [class.border-b-2]='location(menu.link)'
+                    [class.border-yellow-400]='location(menu.link)' [class.text-gray-700]='location(menu.link)'
+                    [class.mx-5]='toggleMenu' [class.my-1]='toggleMenu' [class.flex]='toggleMenu'
+                    class="uppercase prose px-2 prose-md text-gray-400 sm:prose-sm sm:flex-none sm:mx-0 sm:my-0 hover:text-gray-500 cursor-pointer pb-1">{{menu.title}}</a>
+            </li>
+            <a routerLink="/login"
+                class="px-2 bg-yellow-500 rounded-lg text-white prose prose-sm hover:bg-yellow-600">Login</a>
+        </ul>
+    </div>
+</div>

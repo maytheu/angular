@@ -1,0 +1,4 @@
+<div class="flex flex-col mt-3 w-full md:grid-cols-2 md:grid md:gap-4 ">
+    <app-input *ngFor="let formField of formFields" type="{{formField.type}}" title="{{formField.title}}"
+        placeholder="{{formField.placeholder}}" name="{{formField.name}}"></app-input>
+</div>

@@ -1,0 +1,19 @@
+<div class="w-full ">
+    <input *ngIf="!textarea" required type="{{type}}" id='{{title}}' name='{{name}}'
+        class="rounded-md prose-base prose w-full border-gray-300" placeholder="{{placeholder}}" [(ngModel)]="name" />
+    <div *ngIf="textarea" class=" w-full mt-2">
+        <textarea rows="5" placeholder='{{placeholder}}' name='{{name}}' id='{{title}}' [(ngModel)]='name'
+            class="rounded-md w-full border-gray-300 prose-base"></textarea>
+    </div>
+    <!-- <div class='border'>
+        <span class="fi fi-ng"></span> <input required type="text" id='name' name='name'
+            class="prose-base prose border-none" placeholder="test" [(ngModel)]="names" />
+    </div>
+    <div class='border w-full flex'>
+        <ng-select [(ngModel)]="selectedCar" class="w-10">
+            <ng-option *ngFor="let car of cars" [value]="car.id"><span class="fi mr-3"
+                    [class.fi-car.id]></span>{{car.name}}</ng-option>
+        </ng-select> <input required type="text" id='name' name='name' class="prose-base prose border-none"
+            placeholder="test" [(ngModel)]="names" />
+    </div> -->
+</div>

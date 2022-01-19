@@ -1,0 +1,38 @@
+<<div class="flex flex-col w-full">
+    <app-background-image></app-background-image>
+    <div class="bg-white flex flex-col px-20">
+        <div class="flex flex-col mb-12 md:grid md:grid-cols-2 md:gap-10">
+            <div class="flex flex-col mt-7">
+                <h3 class="prose text-slate-800 text-5xl">About Wirepick Inc</h3>
+                <p class="prose mb-2 mt-1">WIREPICK is a leading service provider in the VAS Industry across Africa. We
+                    provide
+                    Enterprise SMS
+                    Message solutions based on the Wirepick-SMS Gateway with the capability to provide direct
+                    connectivity to local Mobile Network Operators across Africa and also a seamless integration with
+                    different types of Information Systems.</p>
+                <p class="prose mb-2">WIREPICK is a leading service provider in the VAS Industry across Africa. We
+                    provide
+                    Enterprise SMS
+                    Message solutions based on the Wirepick-SMS Gateway with the capability to provide direct
+                    connectivity to local Mobile Network Operators across Africa and also a seamless integration with
+                    different types of Information Systems.</p>
+                <p class="prose">WIREPICK is a leading service provider in the VAS Industry across Africa. We provide
+                    Enterprise SMS
+                    Message solutions based on the Wirepick-SMS Gateway with the capability to provide direct
+                    connectivity to local Mobile Network Operators across Africa and also a seamless integration with
+                    different types of Information Systems.</p>
+            </div>
+            <div class="hidden md:block w-96 h-96 -mt-12"><img [src]="imageSource" class="rounded-full w-full h-full" />
+            </div>
+        </div>
+        <div class="flex flex-col my-10 md:grid-cols-3 md:grid md:gap-6">
+            <div class="flex flex-col" *ngFor="let country of countrys">
+                <img [src]="country.flag" class="h-20 w-20 rounded-full mx-auto">
+                <h5 class="text-center prose prose-xl text-slate-800">{{country.country}}</h5>
+                <p class="prose text-center">
+                    <fa-icon [icon]="location" class="mr-3"></fa-icon>{{country.address}}
+                </p>
+            </div>
+        </div>
+    </div>
+    </div>

@@ -1,0 +1,13 @@
+<div>
+    <ng-content></ng-content>
+    <app-button textColor="{{textColor}}" border="{{border}}" mt='{{mt}}' width="{{width}}" (clickBtn)="formSubmit()">
+        {{btnText}}</app-button>
+
+    <!-- <h5 class="prose prose-2xl text-center border-b pb-2 mb-1">Please fill out this form to contact us</h5>
+    <app-form-array [formFields]="formArray"></app-form-array>
+    <div *ngIf="textarea">
+        <app-input textarea="{{textarea}}" type="{{type}}" title="{{title}}" placeholder="{{placeholder}}"
+            name="{{name}}"></app-input>
+        <app-button full>submit</app-button>
+    </div> -->
+</div>
