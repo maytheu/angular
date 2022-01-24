@@ -1,0 +1,25 @@
+<div class="col-6 mx-auto mt-3">
+    <form [formGroup]="form" (ngSubmit)="submitForm()">
+        <div class="mb-3">
+            <label for="exampleFormControlInput1" class="form-label" *ngIf="!update">Phone Id</label>
+            <input type="text" class="form-control" id="price" placeholder="Phone Id" *ngIf="!update"
+                formControlName='id'>
+        </div>
+        <div class="mb-3">
+            <label for="exampleFormControlInput1" class="form-label">Phone Name</label>
+            <input type="text" class="form-control" id="phone" placeholder="Phone" formControlName='name'>
+        </div>
+        <div class="mb-3">
+            <label for="exampleFormControlInput1" class="form-label">Phone Price</label>
+            <input type="text" class="form-control" id="price" placeholder="Price" formControlName='price'>
+        </div>
+        <div class="mb-3">
+            <label for="exampleFormControlTextarea1" class="form-label">Phone Specs</label>
+            <textarea class="form-control" id="specification" formControlName="specification" rows="3"></textarea>
+        </div>
+        <button class="btn col-12 mx-auto border" *ngIf="!update" type="submit"
+            [class.btn-success]='form.valid'>Submit</button>
+        <button class="btn col-12 mx-auto border" *ngIf="update" type="submit"
+            [class.btn-success]='form.valid'>Update</button>
+    </form>
+</div>

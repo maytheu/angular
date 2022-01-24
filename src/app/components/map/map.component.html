@@ -1,0 +1,7 @@
+<form [formGroup]="reference" class="w-100 my-3 d-flex align-content-center">
+    <div class="align-self-center border d-flex pr-5">Points</div>
+<select formControlName='point' class="form-control" (change)="updateLocation()">
+    <option *ngFor="let reference of references" [ngValue]="reference">{{reference.name}}</option>
+</select>
+</form>
+<div id='map-test'>
