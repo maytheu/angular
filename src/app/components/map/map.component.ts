@@ -19,6 +19,7 @@ export class MapComponent implements OnInit {
     { point: [6.46, 3.39], name: 'Device 1' },
     { point: [9.07, 7.39], name: 'Device 2' },
     { point: [4.87, 6.97], name: 'Device 3' },
+    { point: [4.87, 6.97], name: 'Show Geofencing' },
   ];
   constructor(private fb: FormBuilder) {}
   ngOnInit(): void {
@@ -96,6 +97,42 @@ export class MapComponent implements OnInit {
     // this.getBounds(points);
     // this.mapLoad(this.references[0].point);
     this.mapLoad(this.reference.value.point.point);
+
+    if (this.reference.value.point.name === 'Show Geofencing') {
+      console.log('here');
+
+      let data = JSON.parse(localStorage.getItem('points'));
+      data.forEach(({ bounds, type, radius }) => {
+        console.log(bounds);
+
+        if (type === 'rectangle') {
+          L.rectangle(bounds, {
+            color: '#FF0000',
+            opacity: 0.6,
+            fillOpacity: 0.2,
+          }).addTo(this.map);
+        } else if (type === 'polyline') {
+          L.polyline(bounds, {
+            color: '#FF0000',
+            opacity: 0.6,
+            fillOpacity: 0.2,
+          }).addTo(this.map);
+        } else if (type === 'polygon') {
+          L.polygon(bounds, {
+            color: '#FF0000',
+            opacity: 0.6,
+            fillOpacity: 0.2,
+          }).addTo(this.map);
+        } else {
+          L.circle(bounds, {
+            color: '#FF0000',
+            opacity: 0.6,
+            fillOpacity: 0.2,
+            radius: radius,
+          }).addTo(this.map);
+        }
+      });
+    }
   }
 
   mapLoad(point) {
@@ -113,10 +150,10 @@ export class MapComponent implements OnInit {
     let drawControl = new L.Control.Draw({
       draw: {
         position: 'topleft',
-        polygon: false,
+        polygon: true,
         polyline: true,
         rectangle: true,
-        circle: false,
+        circle: true,
         marker: false,
         circlemarker: false,
       },
@@ -131,35 +168,82 @@ export class MapComponent implements OnInit {
       var type = event.layerType,
         layer = event.layer;
 
-      if (type === 'marker') {
-        // Do marker specific actions
-        console.log(layer.toGeoJSON().geometry.coordinates);
-        this.map.fitBounds(
-          L.latLngBounds(layer.toGeoJSON().geometry.coordinates)
-        );
-        // this.map.fitBounds(
-        //   L.latLngBounds(event.layer._latlng.D.lat, event.layer._latlng.D.lng)
-        // );
+      if (type === 'circle') {
+        if (localStorage.getItem('points')) {
+          const value: unknown = {
+            bounds: layer.getLatLng(),
+            type: type,
+            radius: layer._mRadius,
+          };
+          let data = JSON.parse(localStorage.getItem('points'));
+          data.push(value);
+          localStorage.setItem('points', JSON.stringify(data));
+        } else {
+          const value: unknown = [
+            { bounds: layer.getLatLng(), type: type, radius: layer._mRadius },
+          ];
+          localStorage.setItem('points', JSON.stringify(value));
+        }
+        // this.map.fitBounds(layer.getLatLng());
+
+        //   // Do marker specific actions
+        //   console.log(layer.toGeoJSON().geometry.coordinates);
+        //   this.map.fitBounds(
+        //     L.latLngBounds(layer.toGeoJSON().geometry.coordinates)
+        //   );
+        //   // this.map.fitBounds(
+        //   //   L.latLngBounds(event.layer._latlng.D.lat, event.layer._latlng.D.lng)
+        //   // );
       } else {
-        console.log(layer.getBounds(), 'bounds');
-        console.log(
-          layer
-            .getLatLngs()
-            .join(',')
-            .match(/([\d\.]+)/g)
-            .join(','),
-          'latnlng'
-        );
+        // console.log(layer.getBounds(), 'bounds');
+        console.log(layer.getLatLngs());
+        console.log(type);
+
+        let pts = layer
+          .getLatLngs()
+          .join(',')
+          .match(/([\d\.]+)/g);
+        // pts.reduce((rows, key, index) =>
+        //   index % 2 === 0 ? rows.push([key]) : rows[rows.length - 1].push(key)
+        // );
+
+        // pts = pts.map((data) => +data);
+
+        let datas = this.twoDimensional(pts, 2); // :rows[rows.length-1].push(key))
+
+        console.log(datas, 'data');
+
+        // L.rectangle(layer.getLatLngs(), {
+        //   color: '#FF0000',
+        //   opacity: 0.6,
+        //   fillOpacity: 0.2,
+        // }).addTo(this.map);
 
         // this.getBounds(layer.toGeoJSON().geometry.coordinates);
         // this.map.addLayer(drawnItems);
         this.map.fitBounds(layer.getBounds());
+        if (localStorage.getItem('points')) {
+          const value: unknown = { bounds: layer.getLatLngs(), type: type };
+          let data = JSON.parse(localStorage.getItem('points'));
+          data.push(value);
+          localStorage.setItem('points', JSON.stringify(data));
+        } else {
+          const value: unknown = [{ bounds: layer.getLatLngs(), type: type }];
+          localStorage.setItem('points', JSON.stringify(value));
+        }
       }
       // Do whatever else you need to. (save to db; add to map etc)
       this.map.addLayer(layer);
 
       // this.getBounds(point);
     });
+  }
+
+  twoDimensional(arr: number[], size: number): number[] {
+    var res = [];
+    for (var i = 0; i < arr.length; i = i + size)
+      res.push(arr.slice(i, i + size));
+    return res;
   }
 
   getBounds(locs) {
