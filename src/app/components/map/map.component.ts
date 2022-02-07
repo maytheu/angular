@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 
 declare let L;
 L;
@@ -12,11 +12,23 @@ export class MapComponent implements OnInit {
   reference = this.fb.group({
     point: [null],
   }); //dropdown menu
+  search = this.fb.group({
+    latitude: ['', Validators.required],
+    longitude: [
+      '',
+      Validators.required,
+      // Validators.pattern(/^\d+(\.\d{1,})?$/),
+    ],
+  });
+  overview = this.fb.group({ describe: ['', Validators.required] });
+  description: boolean = false;
+  overviewDetails: unknown;
   map: any;
+  markers = new L.FeatureGroup(); //view maker when item is searched
 
   references = [
     { point: [6.46, 3.39], name: 'Device 1' },
-    { point: [9.07, 7.39], name: 'Device 2' },
+    { point: [9.07, 7.03], name: 'Device 2' },
     { point: [4.87, 6.97], name: 'Device 3' },
     { point: [4.87, 6.97], name: 'Show Geofencing' },
   ];
@@ -68,6 +80,58 @@ export class MapComponent implements OnInit {
     }
   }
 
+  onSearch() {
+    let data = JSON.parse(localStorage.getItem('points'));
+    if (this.markers != undefined) {
+      this.markers.clearLayers();
+      this.map.removeLayer(this.markers);
+    }
+    const { latitude, longitude } = this.search.value;
+    let marker = L.marker([latitude, longitude]).addTo(this.markers);
+    this.markers.addTo(this.map);
+    this.map.fitBounds(this.markers.getBounds());
+
+    data.forEach(({ data, details }) => {
+      const { bounds, radius } = data;
+      if (radius) {
+        let circle = L.circle(bounds, { radius });
+        // marker <= radius
+        if (marker.getLatLng().distanceTo(bounds) <= radius) {
+          circle
+            .setStyle({ color: '#FF0000', opacity: 0.6, fillOpacity: 0.2 })
+            .addTo(this.map)
+            .bindPopup(details.describe);
+        }
+      } else {
+        let polygon = L.polygon(bounds);
+        if (polygon.contains(marker.getLatLng())) {
+          polygon
+            .setStyle({ color: '#FF0000', opacity: 0.6, fillOpacity: 0.2 })
+            .addTo(this.map)
+            .bindPopup(details.describe);
+        }
+      }
+    });
+  }
+
+  onOverview() {
+    let data = JSON.parse(localStorage.getItem('points'));
+    const values = { data: this.overviewDetails, details: this.overview.value };
+    console.log(values);
+    if (this.overviewDetails) {
+      if (localStorage.getItem('points')) {
+        data.push(values);
+        localStorage.setItem('points', JSON.stringify(data));
+      } else {
+        const values = [
+          { data: this.overviewDetails, details: this.overview.value },
+        ];
+        localStorage.setItem('points', JSON.stringify(values));
+      }
+    }
+    this.description = false;
+  }
+
   mapLoad(point) {
     this.map = L.map('map-test').setView([7.37, 3.94], 5);
     const t_url = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
@@ -87,7 +151,7 @@ export class MapComponent implements OnInit {
         polyline: true,
         rectangle: true,
         circle: true,
-        marker: true,
+        marker: false,
         circlemarker: false,
       },
       edit: {
@@ -102,27 +166,34 @@ export class MapComponent implements OnInit {
       var type = event.layerType,
         layer = event.layer;
       let data = JSON.parse(localStorage.getItem('points'));
+      this.description = true;
       // handle circle differently
       if (type === 'circle') {
-        if (localStorage.getItem('points')) {
-          const value: unknown = {
-            bounds: layer.getLatLng(),
-            type: type,
-            radius: layer.getRadius(),
-          };
-          layer.bindPopup('Text');
-          data.push(value);
-          localStorage.setItem('points', JSON.stringify(data));
-        } else {
-          const value: unknown = [
-            {
-              bounds: layer.getLatLng(),
-              type: type,
-              radius: layer.getRadius(),
-            },
-          ];
-          localStorage.setItem('points', JSON.stringify(value));
-        }
+        const value: unknown = {
+          bounds: layer.getLatLng(),
+          type: type,
+          radius: layer.getRadius(),
+        };
+        this.overviewDetails = value;
+        // if (localStorage.getItem('points')) {
+        //   const value: unknown = {
+        //     bounds: layer.getLatLng(),
+        //     type: type,
+        //     radius: layer.getRadius(),
+        //   };
+        //   layer.bindPopup('Text');
+        //   data.push(value);
+        //   localStorage.setItem('points', JSON.stringify(data));
+        // } else {
+        //   const value: unknown = [
+        //     {
+        //       bounds: layer.getLatLng(),
+        //       type: type,
+        //       radius: layer.getRadius(),
+        //     },
+        //   ];
+        //   localStorage.setItem('points', JSON.stringify(value));
+        // }
       } else if (type === 'marker') {
         //handle marker action
         data.forEach(({ bounds, radius }) => {
@@ -147,15 +218,16 @@ export class MapComponent implements OnInit {
       } else {
         // other draw element
         this.map.fitBounds(layer.getBounds()); //zoom the new layer
-        if (localStorage.getItem('points')) {
-          const value: unknown = { bounds: layer.getLatLngs(), type: type };
-          // let data = JSON.parse(localStorage.getItem('points'));
-          data.push(value);
-          localStorage.setItem('points', JSON.stringify(data));
-        } else {
-          const value: unknown = [{ bounds: layer.getLatLngs(), type: type }];
-          localStorage.setItem('points', JSON.stringify(value));
-        }
+        // if (localStorage.getItem('points')) {
+        const value: unknown = { bounds: layer.getLatLngs(), type: type };
+        //   // let data = JSON.parse(localStorage.getItem('points'));
+        //   data.push(value);
+        // localStorage.setItem('points', JSON.stringify(data));
+        // } else {
+        //   const value: unknown = [{ bounds: layer.getLatLngs(), type: type }];
+        //   localStorage.setItem('points', JSON.stringify(value));
+        // }
+        this.overviewDetails = value;
       }
       this.map.addLayer(layer);
     });

@@ -1,7 +1,87 @@
 <form [formGroup]="reference" class="w-100 my-3 d-flex align-content-center">
-    <div class="align-self-center border d-flex pr-5">Points</div>
-<select formControlName='point' class="form-control" (change)="updateLocation()">
-    <option *ngFor="let reference of references" [ngValue]="reference">{{reference.name}}</option>
-</select>
+  <div class="align-self-center border d-flex pr-5">Points</div>
+  <select
+    formControlName="point"
+    class="form-control"
+    (change)="updateLocation()"
+  >
+    <option *ngFor="let reference of references" [ngValue]="reference">
+      {{ reference.name }}
+    </option>
+  </select>
 </form>
-<div id='map-test'>
+<div id="map-test"></div>
+<form
+  [formGroup]="search"
+  *ngIf="!description"
+  class="col-6 mx-auto mb-2"
+  (ngSubmit)="onSearch()"
+>
+  <p class="text-center fs-4 mb-0">Search your location</p>
+  <div class="mb-3">
+    <label for="exampleFormControlInput1" class="form-label">Latitude</label>
+    <input
+      type="number"
+      class="form-control"
+      id="latitude"
+      placeholder="Latitude"
+      formControlName="latitude"
+      [class.border-danger]="
+        !search.get('latitude').valid && search.get('latitude').touched
+      "
+    />
+  </div>
+  <div class="mb-3">
+    <label for="exampleFormControlInput1" class="form-label">Longitude</label>
+    <input
+      type="number"
+      class="form-control"
+      id="longitude"
+      placeholder="Longitude"
+      formControlName="longitude"
+      [class.border-danger]="
+        !search.get('longitude').valid && search.get('longitude').touched
+      "
+    />
+  </div>
+  <button
+    class="btn mx-auto border flex float-end mb-2"
+    type="submit"
+    [class.btn-success]="search.valid"
+    [disabled]="!search.valid"
+  >
+    Search
+  </button>
+</form>
+
+<form
+  [formGroup]="overview"
+  *ngIf="description"
+  class="col-6 mx-auto mb-2"
+  (ngSubmit)="onOverview()"
+>
+  <p class="text-center fs-4 mb-0">Describe Your Geofence</p>
+  <div class="mb-3">
+    <label for="exampleFormControlInput1" class="form-label"
+      >Short Description</label
+    >
+    <input
+      type="text"
+      class="form-control"
+      id="describe"
+      placeholder="Geographical point"
+      formControlName="describe"
+      [class.border-danger]="
+        !overview.get('describe').valid && overview.get('describe').touched
+      "
+    />
+  </div>
+  <button
+    class="btn mx-auto border flex float-end mb-2"
+    type="submit"
+    [class.btn-success]="overview.valid"
+    [disabled]="!overview.valid"
+  >
+    Description
+  </button>
+</form>
