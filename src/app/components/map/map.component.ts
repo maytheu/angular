@@ -24,6 +24,7 @@ export class MapComponent implements OnInit {
   ngOnInit(): void {
     this.reference.patchValue({ point: this.references[0] });
     this.mapLoad(this.references[0].point); //initial location on map view
+    console.log(localStorage.getItem('points'));
   }
 
   updateLocation() {
@@ -86,7 +87,7 @@ export class MapComponent implements OnInit {
         polyline: true,
         rectangle: true,
         circle: true,
-        marker: false,
+        marker: true,
         circlemarker: false,
       },
       edit: {
@@ -95,35 +96,60 @@ export class MapComponent implements OnInit {
         remove: false,
       },
     });
-
     this.map.addControl(drawControl);
 
     this.map.on(L.Draw.Event.CREATED, (event) => {
       var type = event.layerType,
         layer = event.layer;
+      let data = JSON.parse(localStorage.getItem('points'));
       // handle circle differently
       if (type === 'circle') {
         if (localStorage.getItem('points')) {
           const value: unknown = {
             bounds: layer.getLatLng(),
             type: type,
-            radius: layer._mRadius,
+            radius: layer.getRadius(),
           };
-          let data = JSON.parse(localStorage.getItem('points'));
+          layer.bindPopup('Text');
           data.push(value);
           localStorage.setItem('points', JSON.stringify(data));
         } else {
           const value: unknown = [
-            { bounds: layer.getLatLng(), type: type, radius: layer._mRadius },
+            {
+              bounds: layer.getLatLng(),
+              type: type,
+              radius: layer.getRadius(),
+            },
           ];
           localStorage.setItem('points', JSON.stringify(value));
         }
+      } else if (type === 'marker') {
+        //handle marker action
+        data.forEach(({ bounds, radius }) => {
+          if (radius) {
+            let circle = L.circle(bounds, { radius });
+            // marker <= radius
+            if (layer.getLatLng().distanceTo(bounds) <= radius) {
+              circle
+                .setStyle({ color: '#FF0000', opacity: 0.6, fillOpacity: 0.2 })
+                .addTo(this.map);
+            }
+            // console.log(bounds.getNorthWest());
+          } else {
+            let polygon = L.polygon(bounds);
+            if (polygon.contains(layer.getLatLng())) {
+              polygon
+                .setStyle({ color: '#FF0000', opacity: 0.6, fillOpacity: 0.2 })
+                .addTo(this.map);
+            }
+          }
+        });
       } else {
         // other draw element
         this.map.fitBounds(layer.getBounds()); //zoom the new layer
         if (localStorage.getItem('points')) {
           const value: unknown = { bounds: layer.getLatLngs(), type: type };
-          let data = JSON.parse(localStorage.getItem('points'));
+          // let data = JSON.parse(localStorage.getItem('points'));
           data.push(value);
           localStorage.setItem('points', JSON.stringify(data));
         } else {
