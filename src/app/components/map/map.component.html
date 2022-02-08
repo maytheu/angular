@@ -11,6 +11,9 @@
   </select>
 </form>
 <div id="map-test"></div>
+<div class="col-6 mx-auto" *ngIf="geofencinggMsg.length > 1">
+  <p *ngFor="let geofencing of geofencinggMsg">{{ geofencing }}</p>
+</div>
 <form
   [formGroup]="search"
   *ngIf="!description"

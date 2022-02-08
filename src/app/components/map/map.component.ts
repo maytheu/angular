@@ -25,18 +25,19 @@ export class MapComponent implements OnInit {
   overviewDetails: unknown;
   map: any;
   markers = new L.FeatureGroup(); //view maker when item is searched
-
+  geofencinggMsg: [string] = [''];
   references = [
     { point: [6.46, 3.39], name: 'Device 1' },
     { point: [9.07, 7.03], name: 'Device 2' },
     { point: [4.87, 6.97], name: 'Device 3' },
     { point: [4.87, 6.97], name: 'Show Geofencing' },
+    { point: [4.87, 6.97], name: 'Show Geofencing Data' },
   ];
   constructor(private fb: FormBuilder) {}
   ngOnInit(): void {
     this.reference.patchValue({ point: this.references[0] });
     this.mapLoad(this.references[0].point); //initial location on map view
-    console.log(localStorage.getItem('points'));
+    this.onGeofencingView();
   }
 
   updateLocation() {
@@ -47,37 +48,102 @@ export class MapComponent implements OnInit {
     this.mapLoad(this.reference.value.point.point);
     // load geofencing data local storage
     if (this.reference.value.point.name === 'Show Geofencing') {
-      let data = JSON.parse(localStorage.getItem('points'));
-      // loop over the data and and display geofencing type
-      data.forEach(({ bounds, type, radius }) => {
-        if (type === 'rectangle') {
-          L.rectangle(bounds, {
-            color: '#FF0000',
-            opacity: 0.6,
-            fillOpacity: 0.2,
-          }).addTo(this.map);
-        } else if (type === 'polyline') {
-          L.polyline(bounds, {
-            color: '#FF0000',
-            opacity: 0.6,
-            fillOpacity: 0.2,
-          }).addTo(this.map);
-        } else if (type === 'polygon') {
-          L.polygon(bounds, {
-            color: '#FF0000',
-            opacity: 0.6,
-            fillOpacity: 0.2,
-          }).addTo(this.map);
-        } else {
-          L.circle(bounds, {
-            color: '#FF0000',
-            opacity: 0.6,
-            fillOpacity: 0.2,
-            radius: radius,
-          }).addTo(this.map);
-        }
-      });
+      this.onGeofencingView();
     }
+    if (this.reference.value.point.name === 'Show Geofencing Data') {
+      this.onGeofencingResult();
+    }
+  }
+
+  onGeofencingView() {
+    let data = JSON.parse(localStorage.getItem('points'));
+    if (data === null) {
+      return alert('No geofenced Data available');
+    }
+    // loop over the data and and display geofencing type
+    data.forEach(({ data, details }) => {
+      const { type, radius, bounds } = data;
+      const { describe } = details;
+      if (type === 'rectangle') {
+        L.rectangle(bounds, {
+          color: '#FF0000',
+          opacity: 0.6,
+          fillOpacity: 0.2,
+        })
+          .addTo(this.map)
+          .bindPopup(describe);
+      } else if (type === 'polyline') {
+        L.polyline(bounds, {
+          color: '#FF0000',
+          opacity: 0.6,
+          fillOpacity: 0.2,
+        })
+          .addTo(this.map)
+          .bindPopup(describe);
+      } else if (type === 'polygon') {
+        L.polygon(bounds, {
+          color: '#FF0000',
+          opacity: 0.6,
+          fillOpacity: 0.2,
+        })
+          .addTo(this.map)
+          .bindPopup(describe);
+      } else {
+        L.circle(bounds, {
+          color: '#FF0000',
+          opacity: 0.6,
+          fillOpacity: 0.2,
+          radius: radius,
+        })
+          .addTo(this.map)
+          .bindPopup(describe);
+      }
+    });
+  }
+
+  onGeofencingResult() {
+    let data = JSON.parse(localStorage.getItem('points'));
+    if (data === null) {
+      return alert('No geofenced Data available');
+    }
+    let latLng = [
+      { point: [12, 7] },
+      { point: [9.07, 7.03] },
+      { point: [4.87, 6.97] },
+    ];
+    let msg: string;
+    latLng.map(({ point }) => {
+      let marker = L.marker(point);
+      data.forEach(({ data, details }) => {
+        const { bounds, radius } = data;
+        const { describe } = details;
+        if (radius) {
+          if (marker.getLatLng().distanceTo(bounds) <= radius) {
+            msg = `${point[0]}° N, ${point[1]}° E lies within the ${describe} geofence`;
+          } else {
+            msg = `${point[0]}° N, ${point[1]}° E does not lies within the ${describe} geofence`;
+          }
+        } else {
+          let polygon = L.polygon(bounds);
+          if (polygon.contains(marker.getLatLng())) {
+            msg = `${point[0]}° N, ${point[1]}° E lies within the ${describe} geofence`;
+          } else {
+            msg = `${point[0]}° N, ${point[1]}° E does not lies within the ${describe} geofence`;
+          }
+        }
+        this.geofencinggMsg.push(msg);
+
+        // if (radius && marker.getLatLng().distanceTo(bounds) <= radius) {
+        //   msg = `${point[0]}° N, ${point[1]}° E lies within the ${describe} geofence`;
+        //   this.geofencinggMsg.push(msg);
+        // }
+        // let polygon = L.polygon(bounds);
+        // if (!radius && polygon.contains(marker.getLatLng())) {
+        //   msg = `${point[0]}° N, ${point[1]}° E lies within the ${describe} geofence`;
+        //   this.geofencinggMsg.push(msg);
+        // }
+      });
+    });
   }
 
   onSearch() {
@@ -89,7 +155,9 @@ export class MapComponent implements OnInit {
     const { latitude, longitude } = this.search.value;
     let marker = L.marker([latitude, longitude]).addTo(this.markers);
     this.markers.addTo(this.map);
-    this.map.fitBounds(this.markers.getBounds());
+    // this.map.fitBounds(this.markers.getBounds());
+
+    this.onGeofencingView();
 
     data.forEach(({ data, details }) => {
       const { bounds, radius } = data;
@@ -117,7 +185,6 @@ export class MapComponent implements OnInit {
   onOverview() {
     let data = JSON.parse(localStorage.getItem('points'));
     const values = { data: this.overviewDetails, details: this.overview.value };
-    console.log(values);
     if (this.overviewDetails) {
       if (localStorage.getItem('points')) {
         data.push(values);
