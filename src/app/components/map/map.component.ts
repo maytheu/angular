@@ -22,7 +22,7 @@ export class MapComponent implements OnInit {
   });
   overview = this.fb.group({ describe: ['', Validators.required] });
   description: boolean = false;
-  overviewDetails: unknown;
+  overviewDetails: any;
   map: any;
   markers = new L.FeatureGroup(); //view maker when item is searched
   geofencinggMsg: [string] = [''];
@@ -61,9 +61,10 @@ export class MapComponent implements OnInit {
       return alert('No geofenced Data available');
     }
     // loop over the data and and display geofencing type
-    data.forEach(({ data, details }) => {
-      const { type, radius, bounds } = data;
-      const { describe } = details;
+    console.log(data);
+
+    data.forEach(({ value, id }) => {
+      const { type, radius, bounds } = value;
       if (type === 'rectangle') {
         L.rectangle(bounds, {
           color: '#FF0000',
@@ -71,7 +72,7 @@ export class MapComponent implements OnInit {
           fillOpacity: 0.2,
         })
           .addTo(this.map)
-          .bindPopup(describe);
+          .bindPopup(id);
       } else if (type === 'polyline') {
         L.polyline(bounds, {
           color: '#FF0000',
@@ -79,7 +80,7 @@ export class MapComponent implements OnInit {
           fillOpacity: 0.2,
         })
           .addTo(this.map)
-          .bindPopup(describe);
+          .bindPopup(id);
       } else if (type === 'polygon') {
         L.polygon(bounds, {
           color: '#FF0000',
@@ -87,7 +88,7 @@ export class MapComponent implements OnInit {
           fillOpacity: 0.2,
         })
           .addTo(this.map)
-          .bindPopup(describe);
+          .bindPopup(id);
       } else {
         L.circle(bounds, {
           color: '#FF0000',
@@ -96,7 +97,7 @@ export class MapComponent implements OnInit {
           radius: radius,
         })
           .addTo(this.map)
-          .bindPopup(describe);
+          .bindPopup(id);
       }
     });
   }
@@ -114,32 +115,31 @@ export class MapComponent implements OnInit {
     let msg: string;
     latLng.map(({ point }) => {
       let marker = L.marker(point);
-      data.forEach(({ data, details }) => {
-        const { bounds, radius } = data;
-        const { describe } = details;
+      data.forEach(({ value, id }) => {
+        const { bounds, radius } = value;
         if (radius) {
           if (marker.getLatLng().distanceTo(bounds) <= radius) {
-            msg = `${point[0]}° N, ${point[1]}° E lies within the ${describe} geofence`;
+            msg = `${point[0]}° N, ${point[1]}° E lies within the ${id} geofence`;
           } else {
-            msg = `${point[0]}° N, ${point[1]}° E does not lies within the ${describe} geofence`;
+            msg = `${point[0]}° N, ${point[1]}° E does not lies within the ${id} geofence`;
           }
         } else {
           let polygon = L.polygon(bounds);
           if (polygon.contains(marker.getLatLng())) {
-            msg = `${point[0]}° N, ${point[1]}° E lies within the ${describe} geofence`;
+            msg = `${point[0]}° N, ${point[1]}° E lies within the ${id} geofence`;
           } else {
-            msg = `${point[0]}° N, ${point[1]}° E does not lies within the ${describe} geofence`;
+            msg = `${point[0]}° N, ${point[1]}° E does not lies within the ${id} geofence`;
           }
         }
         this.geofencinggMsg.push(msg);
 
         // if (radius && marker.getLatLng().distanceTo(bounds) <= radius) {
-        //   msg = `${point[0]}° N, ${point[1]}° E lies within the ${describe} geofence`;
+        //   msg = `${point[0]}° N, ${point[1]}° E lies within the ${id} geofence`;
         //   this.geofencinggMsg.push(msg);
         // }
         // let polygon = L.polygon(bounds);
         // if (!radius && polygon.contains(marker.getLatLng())) {
-        //   msg = `${point[0]}° N, ${point[1]}° E lies within the ${describe} geofence`;
+        //   msg = `${point[0]}° N, ${point[1]}° E lies within the ${id} geofence`;
         //   this.geofencinggMsg.push(msg);
         // }
       });
@@ -199,24 +199,70 @@ export class MapComponent implements OnInit {
     this.description = false;
   }
 
+  onSaveGeofence() {
+    let data = JSON.parse(localStorage.getItem('points'));
+    const values = this.overviewDetails;
+    if (localStorage.getItem('points')) {
+      data.push(values);
+      localStorage.setItem('points', JSON.stringify(data));
+    } else {
+      const values = [this.overviewDetails];
+      localStorage.setItem('points', JSON.stringify(values));
+    }
+  }
+
   mapLoad(point) {
     this.map = L.map('map-test').setView([7.37, 3.94], 5);
+    let googleStreets = L.tileLayer(
+      'http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
+      {
+        maxZoom: 20,
+        subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+      }
+    );
+    let googleSat = L.tileLayer(
+      'http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
+      {
+        maxZoom: 20,
+        subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+      }
+    );
     const t_url = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
     const attribution = '';
     ('Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>');
     const tiles = L.tileLayer(t_url, { attribution, maxZoom: 18 });
-    tiles.addTo(this.map);
+    let googleHybrid = L.tileLayer(
+      'http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}',
+      {
+        maxZoom: 20,
+        subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+      }
+    );
+    let googleTerrain = L.tileLayer(
+      'http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}',
+      {
+        maxZoom: 20,
+        subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+      }
+    );
+    // tiles.addTo(this.map);
+    googleStreets.addTo(this.map);
+    // googleHybrid.addTo(this.map);
+    // googleSat.addTo(this.map);
+    // googleTerrain.addTo(this.map);
     let marker = L.marker(point);
     marker.addTo(this.map);
 
     let drawnItems = new L.FeatureGroup();
+    drawnItems.addTo(this.map);
     this.map.addLayer(drawnItems);
+
     let drawControl = new L.Control.Draw({
       draw: {
         position: 'topleft',
         polygon: true,
         polyline: true,
-        rectangle: true,
+        rectangle: {},
         circle: true,
         marker: false,
         circlemarker: false,
@@ -227,6 +273,7 @@ export class MapComponent implements OnInit {
         remove: false,
       },
     });
+
     this.map.addControl(drawControl);
 
     this.map.on(L.Draw.Event.CREATED, (event) => {
@@ -234,6 +281,29 @@ export class MapComponent implements OnInit {
         layer = event.layer;
       let data = JSON.parse(localStorage.getItem('points'));
       this.description = true;
+
+      let id = this.getName(layer);
+      if (id === null) return;
+      let len = id.length;
+
+      while (len > 10) {
+        let id = this.getName(layer);
+        len = id.length;
+      }
+
+      let createdPolygonTemplate =
+        '<form id="popup-form">\
+<label for="input-speed">Name:</label>\
+<input id="name" type="text" />\
+</form>';
+
+      var template =
+        '<form id="popup-form">\
+  <label for="input-speed">New speed:</label>\
+  <input id="input-speed" class="popup-input" type="number" />\
+  <button id="button-submit" type="button">Save Changes</button>\
+</form>';
+
       // handle circle differently
       if (type === 'circle') {
         const value: unknown = {
@@ -241,7 +311,8 @@ export class MapComponent implements OnInit {
           type: type,
           radius: layer.getRadius(),
         };
-        this.overviewDetails = value;
+        this.overviewDetails = { value, id };
+        this.onSaveGeofence();
         // if (localStorage.getItem('points')) {
         //   const value: unknown = {
         //     bounds: layer.getLatLng(),
@@ -284,7 +355,7 @@ export class MapComponent implements OnInit {
         });
       } else {
         // other draw element
-        this.map.fitBounds(layer.getBounds()); //zoom the new layer
+        // this.map.fitBounds(layer.getBounds()); //zoom the new layer
         // if (localStorage.getItem('points')) {
         const value: unknown = { bounds: layer.getLatLngs(), type: type };
         //   // let data = JSON.parse(localStorage.getItem('points'));
@@ -294,9 +365,18 @@ export class MapComponent implements OnInit {
         //   const value: unknown = [{ bounds: layer.getLatLngs(), type: type }];
         //   localStorage.setItem('points', JSON.stringify(value));
         // }
-        this.overviewDetails = value;
+
+        this.overviewDetails = { value, id };
+        this.onSaveGeofence();
+        // drawnItems.addLayer(layer);
+        // layer.bindPopup(template).openPopup();
       }
       this.map.addLayer(layer);
     });
   }
+
+  getName = function (layer): any {
+    var code = prompt('please, enter the geofencing code');
+    return code;
+  };
 }

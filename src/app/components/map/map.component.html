@@ -59,7 +59,6 @@
 
 <form
   [formGroup]="overview"
-  *ngIf="description"
   class="col-6 mx-auto mb-2"
   (ngSubmit)="onOverview()"
 >
@@ -88,3 +87,34 @@
     Description
   </button>
 </form>
+<!-- 
+<form
+    [formGroup]="overview"
+    class="col-6 mx-auto mb-2 position-absolute top-0 end-0"
+    (ngSubmit)="onOverview()"
+  >
+    <p class="text-center fs-4 mb-0">Describe Your Geofence</p>
+    <div class="mb-3">
+      <label for="exampleFormControlInput1" class="form-label"
+        >Short Description</label
+      >
+      <input
+        type="text"
+        class="form-control"
+        id="describe"
+        placeholder="Geographical point"
+        formControlName="describe"
+        [class.border-danger]="
+          !overview.get('describe').valid && overview.get('describe').touched
+        "
+      />
+    </div>
+    <button
+      class="btn mx-auto border flex float-end mb-2"
+      type="submit"
+      [class.btn-success]="overview.valid"
+      [disabled]="!overview.valid"
+    >
+      Description
+    </button>
+  </form> -->
