@@ -11,6 +11,10 @@
   </select>
 </form>
 <div id="map-test"></div>
+<div
+  id="pano"
+  style="position: absolute; left: 410px; top: 8px; width: 400px; height: 300px"
+></div>
 <div class="col-6 mx-auto" *ngIf="geofencinggMsg.length > 1">
   <p *ngFor="let geofencing of geofencinggMsg">{{ geofencing }}</p>
 </div>

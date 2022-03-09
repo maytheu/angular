@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
 declare let L;
+declare let google
 L;
 @Component({
   selector: 'app-map',
@@ -213,6 +214,8 @@ export class MapComponent implements OnInit {
 
   mapLoad(point) {
     this.map = L.map('map-test').setView([7.37, 3.94], 5);
+    // let googleLayer = new L.Google('ROADMAP');
+      // this.map.addLayer(googleLayer);
     let googleStreets = L.tileLayer(
       'http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
       {
@@ -251,7 +254,19 @@ export class MapComponent implements OnInit {
     // googleSat.addTo(this.map);
     // googleTerrain.addTo(this.map);
     let marker = L.marker(point);
+
     marker.addTo(this.map);
+
+    // let fenway = new google.maps.LatLng(42.345573,-71.098326);
+    // var panoramaOptions = {
+    //   position: fenway,
+    //   pov: {
+    //     heading: 34,
+    //     pitch: 10
+    //   }
+    // };
+    // var panorama = new  google.maps.StreetViewPanorama(document.getElementById('pano'),panoramaOptions);
+    // this.map.setStreetView(panorama);
 
     let drawnItems = new L.FeatureGroup();
     drawnItems.addTo(this.map);
