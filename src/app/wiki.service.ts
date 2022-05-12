@@ -1,6 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
+interface WikiResponse {
+  query: {
+    search: {
+      title: string;
+      snippet: string;
+      pageid: number;
+    }[];
+  };
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -9,7 +19,7 @@ export class WikiService {
 
   search(term: string) {
     const url = `https://en.wikipedia.org/w/api.php`;
-    return this.http.get(url, {
+    return this.http.get<WikiResponse>(url, {
       params: {
         action: 'query',
         list: 'search',

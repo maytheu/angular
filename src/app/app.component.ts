@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { WikiService } from './wiki.service';
+import { pluck } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -12,8 +13,11 @@ export class AppComponent {
   constructor(private wiki: WikiService) {}
 
   onTermSearch(term: string) {
-    this.wiki.search(term).subscribe((data: any) => {
-      this.pages = data.query.search;
-    });
+    this.wiki
+      .search(term)
+      .pipe(pluck('query', 'search'))
+      .subscribe((data) => {
+        this.pages = data;
+      });
   }
 }
