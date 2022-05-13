@@ -1,1 +1,2 @@
-<p>photos works!</p>
+<img *ngif="photo !== ''" [src]="photo" />
+<div><button (click)="reload()">Fetch New Image</button></div>
