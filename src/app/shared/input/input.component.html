@@ -1,1 +1,25 @@
-<p>input works!</p>
+<div class="field">
+  <label>{{ label }}</label
+  ><input [formControl]="control" [type]="type" />
+  <div
+    *ngIf="
+      control.errors && control.touched && control.invalid && control.dirty
+    "
+    class="ui pointing red basic label"
+  >
+    <p *ngIf="control.errors?.['required']">{{ label }} is required</p>
+    <p *ngIf="control.errors?.['minlength']">
+      {{ label }} you entered is
+      {{ control.errors?.['minlength'].actualLength }}, but
+      {{ control.errors?.['minlength'].requiredLength }} is required
+    </p>
+    <p *ngIf="control.errors?.['maxlength']">
+      {{ label }} you entered is
+      {{ control.errors?.['maxlength'].actualLength }}, but
+      {{ control.errors?.['maxlength'].requiredLength }} is required
+    </p>
+    <p *ngIf="control.errors?.['pattern']">{{ label }} is invalid</p>
+    <p *ngIf="control.errors?.['nonuniqueusername']">username exist already</p>
+    <p *ngIf="control.errors?.['noConnection']">Network not available</p>
+  </div>
+</div>

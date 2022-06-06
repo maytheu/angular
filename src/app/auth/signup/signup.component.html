@@ -1,18 +1,33 @@
 <h3>Create an Account</h3>
 
 <form [formGroup]="signup" class="ui form">
-  <div class="field">
-    <label>Username</label><input formControlName="username" />
+  <app-input
+    label="Username"
+    [control]="$any(signup).get('username')"
+  ></app-input>
+
+  <app-input
+    label="Password"
+    type="password"
+    [control]="$any(signup).get('password')"
+  ></app-input>
+
+  <app-input
+    label="Confirm Password"
+    type="password"
+    [control]="$any(signup).get('passwordConfirmation')"
+  ></app-input>
+
+  <div
+    *ngIf="
+      signup.errors &&
+      signup.get('password')?.touched &&
+      signup.get('passwordConfirmation')?.touched
+    "
+    class="ui red basic label"
+  >
+    <p *ngIf="signup.errors?.['passwordDontMatch']">Password do not match</p>
   </div>
 
-  <div class="field">
-    <label>Password</label> <input formControlName="password" />
-  </div>
-
-  <div class="field">
-    <label>Confirm Password</label
-    ><input formControlName="passwordConfirmation" />
-  </div>
-
-  <button class="ui submit button primary">Submit</button>
+  <div><button class="ui submit button primary">Submit</button></div>
 </form>
