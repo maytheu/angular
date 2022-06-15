@@ -1,1 +1,28 @@
-<p>signin works!</p>
+<h3>Sign In</h3>
+
+<form [formGroup]="signin" class="ui form" (ngSubmit)="onSubmit()">
+  <app-input
+    label="Username"
+    [control]="$any(signin).get('username')"
+  ></app-input>
+
+  <app-input
+    label="Password"
+    type="password"
+    [control]="$any(signin).get('password')"
+  ></app-input>
+
+  <div
+    *ngIf="signin.errors && signin.get('password')?.touched"
+    class="ui red basic label"
+  >
+    <p *ngIf="signin.errors?.['noConnection']">No network detected</p>
+    <p *ngIf="signin.errors?.['unknownError']">error ocured, try again later</p>
+  </div>
+
+  <div>
+    <button class="ui submit button primary" [disabled]="signin.invalid">
+      Submit
+    </button>
+  </div>
+</form>

@@ -1,6 +1,6 @@
 <h3>Create an Account</h3>
 
-<form [formGroup]="signup" class="ui form">
+<form [formGroup]="signup" class="ui form" (ngSubmit)="onSubmit()">
   <app-input
     label="Username"
     [control]="$any(signup).get('username')"
@@ -27,7 +27,13 @@
     class="ui red basic label"
   >
     <p *ngIf="signup.errors?.['passwordDontMatch']">Password do not match</p>
+    <p *ngIf="signup.errors?.['noConnection']">No network detected</p>
+    <p *ngIf="signup.errors?.['unknownError']">error ocured, try again later</p>
   </div>
 
-  <div><button class="ui submit button primary">Submit</button></div>
+  <div>
+    <button class="ui submit button primary" [disabled]="signup.invalid">
+      Submit
+    </button>
+  </div>
 </form>
