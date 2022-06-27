@@ -9,6 +9,11 @@ export interface SignupData {
   passwordConfirmation: string;
 }
 
+export interface SigninData {
+  username: string;
+  password: string;
+}
+
 export interface signedinResponse {
   authenticated: boolean;
   username: string;
@@ -45,5 +50,11 @@ export class AuthService {
     return this.http
       .post(`${this.authurl}signout`, {})
       .pipe(tap(() => this.signin$.next(false)));
+  }
+
+  signin(data: SigninData) {
+    return this.http
+      .post(`${this.authurl}signin`, data)
+      .pipe(tap(() => this.signin$.next(true)));
   }
 }

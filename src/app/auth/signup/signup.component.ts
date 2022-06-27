@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { MatchPassword } from '../validate/match-password';
 import { UniqueUsername } from '../validate/unique-username';
@@ -39,14 +40,17 @@ export class SignupComponent implements OnInit {
   constructor(
     private matchPassword: MatchPassword,
     private uniqueUsername: UniqueUsername,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {}
 
   onSubmit() {
     this.authService.signup(this.signup.value).subscribe({
-      next: () => {},
+      next: () => {
+        this.router.navigateByUrl('/inbox');
+      },
       error: (err) => {
         if (!err.status) {
           this.signup.setErrors({ noConnection: true });

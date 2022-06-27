@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-signin',
@@ -21,9 +23,23 @@ export class SigninComponent implements OnInit {
     ]),
   });
 
-  constructor() {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {}
 
-  onSubmit(){}
+  onSubmit() {
+    this.authService.signin(this.signin.value).subscribe({
+      next: () => {
+        this.router.navigateByUrl('/inbox');
+      },
+      error: (err) => {
+        if (!err.status) {
+          this.signin.setErrors({ noConnection: true });
+        }
+        if (err.error.username || err.error.password) {
+          this.signin.setErrors({ unknownError: true });
+        }
+      },
+    });
+  }
 }
