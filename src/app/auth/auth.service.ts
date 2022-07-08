@@ -25,6 +25,7 @@ export interface signedinResponse {
 export class AuthService {
   private authurl = 'https://api.angular-email.com/auth/';
   signin$ = new BehaviorSubject(false);
+  username = '';
 
   constructor(private http: HttpClient) {}
 
@@ -37,13 +38,21 @@ export class AuthService {
   signup(data: SignupData) {
     return this.http
       .post<{ username: string }>(`${this.authurl}signup`, data)
-      .pipe(tap(() => this.signin$.next(true)));
+      .pipe(
+        tap(({ username }) => {
+          this.signin$.next(true);
+          this.username = username;
+        })
+      );
   }
 
   checkAuth() {
-    return this.http
-      .get<signedinResponse>(`${this.authurl}signedin`)
-      .pipe(tap(({ authenticated }) => this.signin$.next(authenticated)));
+    return this.http.get<signedinResponse>(`${this.authurl}signedin`).pipe(
+      tap(({ authenticated, username }) => {
+        this.signin$.next(authenticated);
+        this.username = username;
+      })
+    );
   }
 
   signout() {
@@ -54,7 +63,12 @@ export class AuthService {
 
   signin(data: SigninData) {
     return this.http
-      .post(`${this.authurl}signin`, data)
-      .pipe(tap(() => this.signin$.next(true)));
+      .post<{ username: string }>(`${this.authurl}signin`, data)
+      .pipe(
+        tap(({ username }) => {
+          this.signin$.next(true);
+          this.username = username;
+        })
+      );
   }
 }

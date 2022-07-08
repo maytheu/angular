@@ -1,6 +1,14 @@
 <div class="field">
   <label>{{ label }}</label
-  ><input [formControl]="control" [type]="type" />
+  ><input
+    *ngIf="controlType === 'input'"
+    [formControl]="control"
+    [type]="type"
+  />
+  <textarea
+    [formControl]="control"
+    *ngIf="controlType === 'textarea'"
+  ></textarea>
   <div
     *ngIf="
       control.errors && control.touched && control.invalid && control.dirty
@@ -8,6 +16,7 @@
     class="ui pointing red basic label"
   >
     <p *ngIf="control.errors?.['required']">{{ label }} is required</p>
+    <p *ngIf="control.errors?.['email']">{{ label }} requires valid email</p>
     <p *ngIf="control.errors?.['minlength']">
       {{ label }} you entered is
       {{ control.errors?.['minlength'].actualLength }}, but

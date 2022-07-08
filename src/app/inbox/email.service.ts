@@ -8,8 +8,6 @@ export interface EmailSummary {
   from: string;
 }
 
-
-
 // with credential is not needed since we alradey have an http interceptor
 @Injectable({
   providedIn: 'root',
@@ -26,4 +24,9 @@ export class EmailService {
   getEmail(id: string) {
     return this.http.get<Email>(`${this.inboxurl}emails/${id}`);
   }
+
+  createEmail(email: Email) {
+    return this.http.post(`${this.inboxurl}emails`, email);
+  }
+
 }
