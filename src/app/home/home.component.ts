@@ -17,6 +17,8 @@ import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import { CourseDialogComponent } from "../course-dialog/course-dialog.component";
 import { CoursesService } from "../services/courses.service";
 import { LoadingServiceService } from "../loading/loading-service.service";
+import { MessagesService } from "../messages/messages.service";
+import { CourseStoreService } from "../services/course-store.service";
 
 @Component({
   selector: "home",
@@ -30,7 +32,9 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private courses: CoursesService,
-    private loadingService: LoadingServiceService
+    private loadingService: LoadingServiceService,
+    private messageService: MessagesService,
+    private courseStore: CourseStoreService
   ) {}
 
   ngOnInit() {
@@ -50,16 +54,30 @@ export class HomeComponent implements OnInit {
   }
 
   reloadComponent() {
+
+    this.beginnerCourses$ = this.courseStore.filterByCategory('BEGINNER')
+
+
+    this.advancedCourses$ = this.courseStore.filterByCategory('ADVANCED')
+
     //call the loading service
     // this.loadingService.loadingOn();
 
+
+    /**not valid since we rea now using the statsful store
     const courses$ = this.courses.loadAllCourses().pipe(
       map((courses) => courses.sort(sortCoursesBySeqNo)),
+      catchError((err) => {
+        const message = "could not load courses";
+        this.messageService.showErrors(message);
+        console.log(message, err);
+        return throwError(err); //immediatel emits err and terminate observable
+      })
       // finalize(() => this.loadingService.loadingOff())
     );
 
     //using a more consice loading indicator
-    const loadCourses$ = this.loadingService.showLoaderUntilCompleted(courses$)
+    const loadCourses$ = this.loadingService.showLoaderUntilCompleted(courses$);
 
     this.beginnerCourses$ = loadCourses$.pipe(
       map((courses) =>
@@ -72,5 +90,6 @@ export class HomeComponent implements OnInit {
         courses.filter((course) => course.category === "ADVANCED")
       )
     );
+    */
   }
 }

@@ -15,12 +15,14 @@ import { catchError } from "rxjs/operators";
 import { throwError } from "rxjs";
 import { CoursesService } from "../services/courses.service";
 import { LoadingServiceService } from "../loading/loading-service.service";
+import { MessagesService } from "../messages/messages.service";
+import { CourseStoreService } from "../services/course-store.service";
 
 @Component({
   selector: "course-dialog",
   templateUrl: "./course-dialog.component.html",
   styleUrls: ["./course-dialog.component.css"],
-  providers: [LoadingServiceService], //available to dialog component
+  providers: [LoadingServiceService, MessagesService], //available to dialog component
 })
 export class CourseDialogComponent implements AfterViewInit {
   form: FormGroup;
@@ -32,7 +34,9 @@ export class CourseDialogComponent implements AfterViewInit {
     private dialogRef: MatDialogRef<CourseDialogComponent>,
     @Inject(MAT_DIALOG_DATA) course: Course,
     private courseServe: CoursesService,
-    private loadingService: LoadingServiceService
+    private loadingService: LoadingServiceService,
+    private msgService: MessagesService,
+    private courseStore: CourseStoreService
   ) {
     this.course = course;
 
@@ -49,13 +53,25 @@ export class CourseDialogComponent implements AfterViewInit {
   save() {
     const changes = this.form.value;
 
-    const saveCourse$ = this.courseServe.saveCourse(this.course.id, changes);
+    //woring with the store
+    this.courseStore.saveCourse(this.course.id, changes).subscribe();
+    this.dialogRef.close(changes);
 
-    this.loadingService
-      .showLoaderUntilCompleted(saveCourse$)
-      .subscribe((val) => {
-        this.dialogRef.close(val);
-      });
+    // const saveCourse$ = this.courseServe
+    //   .saveCourse(this.course.id, changes)
+      // .pipe(
+      //   catchError((error) => {
+      //     const message = "Course cannot be updated";
+      //     this.msgService.showErrors(message)
+      //     return throwError(error);
+      //   })
+    //   );
+
+    // this.loadingService
+    //   .showLoaderUntilCompleted(saveCourse$)
+    //   .subscribe((val) => {
+    // this.dialogRef.close(val);
+    //   });
 
     // this.courseServe.saveCourse(this.course.id, changes).subscribe((val) => {
     //   this.dialogRef.close(val);
