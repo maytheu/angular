@@ -92,5 +92,8 @@
       }
     }
   },
-  "defaultProject": "crash"
+  "defaultProject": "crash",
+  "cli": {
+    "analytics": false
+  }
 }

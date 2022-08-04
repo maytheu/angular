@@ -13,6 +13,7 @@ import { TaskItemComponent } from './components/task-item/task-item.component';
 import { AddTaskComponent } from './components/add-task/add-task.component';
 import { AboutComponent } from './pages/about/about.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { TaskStoreService } from './services/task-store.service';
 
 const routes: Routes = [
   { path: '', component: TasksComponent },

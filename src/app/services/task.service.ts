@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { Task } from '../interface/Task';
-// import { TASKS } from '../mockTask'; not needed again
 
 @Injectable({
   providedIn: 'root',
@@ -18,17 +17,11 @@ export class TaskService {
 
   //all task endpoint
   getTask(): Observable<Task[]> {
-    // return obeservable from a file
-    // {  const tasks = of(TASKS);
-    //   return tasks;
-    // }
-
-    // async with http
     return this.http.get<Task[]>(this.serverUrl);
   }
 
   // delete single task based on id
-  deleteTask(task?: Task): Observable<Task> {
+  deleteTask(task: Task): Observable<Task> {
     const url = `${this.serverUrl}/${task?.id}`;
     return this.http.delete<Task>(url, this.httpOptions);
   }
@@ -40,7 +33,7 @@ export class TaskService {
   }
 
   // new task
-  newTask(task?: Task): Observable<Task> {
+  newTask(task: Task): Observable<Task> {
     return this.http.post<Task>(this.serverUrl, task, this.httpOptions);
   }
 }

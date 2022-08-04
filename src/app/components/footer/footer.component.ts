@@ -12,7 +12,6 @@ export class FooterComponent implements OnInit {
   ngOnInit(): void {}
 
   hasRoutes(route: string) {
-    console.log(this.router.url === route);
     return this.router.url !== route;
   }
 }
