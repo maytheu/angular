@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
 import { Course, sortCoursesBySeqNo } from "../model/course";
 import { interval, noop, Observable, of, throwError, timer } from "rxjs";
 import {
@@ -24,6 +24,7 @@ import { CourseStoreService } from "../services/course-store.service";
   selector: "home",
   templateUrl: "./home.component.html",
   styleUrls: ["./home.component.css"],
+  changeDetection:ChangeDetectionStrategy.OnPush //for reactive implementation
 })
 export class HomeComponent implements OnInit {
   beginnerCourses$: Observable<Course[]>;
