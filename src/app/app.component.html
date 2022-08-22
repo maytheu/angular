@@ -6,9 +6,19 @@
 </div>
 
 <div class="courses">
-  <course-card (onView)="viewCourse($event)" [course]="angCourse"></course-card>
-
-  <course-card (onView)="viewCourse($event)" [course]="angDeep"></course-card>
-
-  <course-card (onView)="viewCourse($event)" [course]="rxjCourse"></course-card>
+  <course-card
+    *ngFor="
+      let course of courses;
+      index as i;
+      first as isFirst;
+      last as isLAst;
+      even as isEven;
+      odd as isOdd
+    "
+    [class.is-first]="isFirst"
+    [class.is-last]="isLAst"
+    (onView)="viewCourse($event)"
+    [course]="course"
+    [cardIndex]="i + 1"
+  ></course-card>
 </div>

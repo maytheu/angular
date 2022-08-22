@@ -1,11 +1,21 @@
-  <div class="course-card">
-    <div class="course-title">
-      {{ course.description }}
-    </div>
-    <img width="300" alt="Angular Logo" [src]="course.iconUrl" />
-
-    <div class="course-description">
-      {{ course.longDescription }}
-    </div>
-    <button (click)="onClickViewed()">View Course</button>
+<div class="course-card" [ngClass]="cardClass()">
+  <div class="course-title">
+    {{ cardIndex + " " + course.description }}
   </div>
+  <img width="300" alt="Angular Logo" [src]="course.iconUrl" />
+
+  <div class="course-description">
+    {{ course.longDescription }}
+  </div>
+  <div class="course-category" [ngSwitch]="course.category">
+    <div class="category" *ngSwitchCase="'BEGINNER'">Beginner</div>
+
+    <div class="category" *ngSwitchCase="'INTERMEDIATE'">Intermediate</div>
+
+    <div class="category" *ngSwitchCase="'ADVANCED'">Advanced</div>
+
+    <div class="category" *ngSwitchDefault="'ALL'">All Levels</div>
+
+  </div>
+  <button (click)="onClickViewed()">View Course</button>
+</div>

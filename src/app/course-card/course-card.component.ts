@@ -8,13 +8,21 @@ import { Course } from "../model/course";
 })
 export class CourseCardComponent implements OnInit {
   @Input() course: Course;
-@Output() onView = new EventEmitter<Course>()
+  @Input() cardIndex: number;
+
+  @Output() onView = new EventEmitter<Course>();
 
   constructor() {}
 
   ngOnInit(): void {}
 
-  onClickViewed(){
-this.onView.emit(this.course)
+  onClickViewed() {
+    this.onView.emit(this.course);
+  }
+
+  cardClass() {
+    console.log(this.course.category);
+
+    return { beginner: this.course.category === "BEGINNER" };
   }
 }
