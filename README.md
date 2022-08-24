@@ -1,4 +1,19 @@
 
+##  Note from the Angular Core Deep Dive (Video Course) from taken from angular university on udemy
+
+# Local Template query
+### @ViewChild()
+- @ViewChild(component|'') - accept the component to query or the template refrence using #
+- scope of the @viewChild() is only to the template and its component and not to deeper scope i.e child/parent component, we cant query down the heirachy tree
+- the data is first available in the ngAfterViewInit()
+
+### @viewChildren()
+-similar to @viewChild(), but accept multiple children instread of one
+
+### Life sycle hook
+- Afterviewinit() lifecycle is the initialization to access native elment with @viewChild()
+* avoid template changes in this life cycle
+
 ##  Angular Core Deep Dive (Video Course)
 
 This repository contains the code of the [Angular Core Deep Dive](https://angular-university.io/course/angular-course).
