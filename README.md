@@ -14,6 +14,18 @@
 - Afterviewinit() lifecycle is the initialization to access native elment with @viewChild()
 * avoid template changes in this life cycle
 
+## content projection
+where a reuseable component have a dynamic child elemt, <ng-content> is used to load the dynamic child element from the parent component 
+
+<ng-content> is defined in the child component while the parent can now pass dynamic element which is projected by the child element
+
+we can also do partial projection of the child component using the select from <ng-content>
+
+
+
+
+
+
 ##  Angular Core Deep Dive (Video Course)
 
 This repository contains the code of the [Angular Core Deep Dive](https://angular-university.io/course/angular-course).
