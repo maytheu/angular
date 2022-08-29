@@ -21,7 +21,9 @@ where a reuseable component have a dynamic child elemt, <ng-content> is used to 
 
 we can also do partial projection of the child component using the select from <ng-content>
 
-
+## @ContentChild()
+similar to @viewchid() can only view the content of a projected content, it is visible at the level of the parent component and not the reusable component
+similar to @viewchild() @contentchild() can be use to query template, component instance and native dom element
 
 
 
