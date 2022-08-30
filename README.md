@@ -28,6 +28,16 @@ similar to @viewchild() @contentchild() can be use to query template, component 
 ## @ContentChildren()\
 similar to @viewChildren() query multiple element as array, the ngAfterContentInit() is the guaranteed earliest lifecycle to get the content chidlren as oppose to @view childre where it is guaranteed at ngAfetrViewInit()
 
+## ngIf directive
+it is used in angular template for displaying templates conditionally
+the else condtion is implemented in <ng-template> and a reference attached to it
+<ng-template> allow us to define block of isolated template
+<ng-template> block is not displayed by defalt
+
+### ng-template
+ngTemplateOutlet is ussed to instantiate a <ng-template>
+private variable can be passed to<ng-template #ngTemplateref let-contextName='name'> by using a context from a parent component
+<div *ngTemplateOutlet='ngTemplateref' context={name:'name'}>
 
 
 
