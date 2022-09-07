@@ -1,3 +1,9 @@
+/* target the host template */
+:host {
+  display: block;
+}
+
+
 .course-card.beginner{
   background: darksalmon;
 }

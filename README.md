@@ -39,6 +39,25 @@ ngTemplateOutlet is ussed to instantiate a <ng-template>
 private variable can be passed to<ng-template #ngTemplateref let-contextName='name'> by using a context from a parent component
 <div *ngTemplateOutlet='ngTemplateref' context={name:'name'}>
 
+## Directives
+there are diff directive in angualar - structural(take *), attribute diretive- modifies html structure
+we can create custome directive using the angula cli ng g d [file name]
+cos of the [] in directive selector, it means it a an attribute selector
+@HostBinding() can be use to manipulate css as '/directive/highlighted
+- strucureal directive also generated the same way, it is applied on the top of html template
+a destrcutured SD is similar to attribute dir in that it is in <ng-template [ngIf]> form but a shorthand form uses the *ngIf
+implenting sd is /directive/oppif
+
+ ## View encapsulation v.e
+- angular utilizes view encapsulation for its style component, the component can accept array of style, each component has a unique identifier in the dom (special content attribute).
+- <ng-content> styles are exposed in the parent component
+- :host{} is used to target the whole template and not the content of the template, inspecting the dom, angular uses the nghost identifier
+- ::ng-deep is a way of bypassing v.e, it ensure that a unique identifier is not attach the particular selector, i.e css can be used anywhere and not particlar to a component
+
+
+
+
+
 
 
 ##  Angular Core Deep Dive (Video Course)

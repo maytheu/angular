@@ -1,8 +1,8 @@
 <div class="course-card" [ngClass]="cardClass()">
-  <div class="course-title">
+  <div class="course-title" >
     {{ cardIndex + " " + course.description }}
   </div>
-  <img width="300" alt="Angular Logo" [src]="course.iconUrl" />
+  <img width="300" alt="Angular Logo" [src]="course.iconUrl"  *oppIf="!course.iconUrl"/>
 
   <div class="course-description">
     {{ course.longDescription }}

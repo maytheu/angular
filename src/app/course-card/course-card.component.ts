@@ -21,7 +21,6 @@ export class CourseCardComponent implements OnInit {
   }
 
   cardClass() {
-    console.log(this.course.category);
 
     return { beginner: this.course.category === "BEGINNER" };
   }
