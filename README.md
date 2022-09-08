@@ -57,6 +57,10 @@ implenting sd is /directive/oppif
 in the component decorator, add encapsulation as part of the object viewencapsulation.{consant}
 
 
+## Services
+- import { HttpClientModule } from "@angular/common/http"; and add to import in module
+- invoke the httpClient in the constructor
+-we can set params to http req using the new HttpParam().set('name', 'value'), which is then pass as an object to the http method
 
 
 
