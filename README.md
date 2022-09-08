@@ -53,6 +53,8 @@ implenting sd is /directive/oppif
 - <ng-content> styles are exposed in the parent component
 - :host{} is used to target the whole template and not the content of the template, inspecting the dom, angular uses the nghost identifier
 - ::ng-deep is a way of bypassing v.e, it ensure that a unique identifier is not attach the particular selector, i.e css can be used anywhere and not particlar to a component
+- the default view encapsulation is the emulated, none - uses the regular css and view encapsulation do not work, shodomdom is similar to emulated view encapsulation but its browser api not of angular
+in the component decorator, add encapsulation as part of the object viewencapsulation.{consant}
 
 
 
