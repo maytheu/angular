@@ -58,9 +58,13 @@ in the component decorator, add encapsulation as part of the object viewencapsul
 
 
 ## Services
+- generate a service file using angular cli ng g s [servicepath]
+- when aservice is created the provided in makes only one instance of the service but makes it accessible to every component (application singleton)
 - import { HttpClientModule } from "@angular/common/http"; and add to import in module
 - invoke the httpClient in the constructor
--we can set params to http req using the new HttpParam().set('name', 'value'), which is then pass as an object to the http method
+-advantage of setting up service file, eradability, easy to debug and maitain, no code duplication
+- we can set params to http req using the new HttpParam().set('name', 'value'), which is then pass as an object to the http method
+- we can subscribe to the observable by using the subscribe() in class or the |async in template
 
 
 
