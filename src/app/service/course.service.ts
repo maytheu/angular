@@ -16,4 +16,8 @@ export class CourseService {
       .get<Course[]>("/api/courses", { params })
       .pipe(map((courses) => courses["payload"]));
   }
+IIIi
+  saveCourse(course: Course) {
+    return this.http.put(`/api/courses/${course.id}`, course);
+  }
 }

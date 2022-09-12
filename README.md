@@ -64,8 +64,11 @@ in the component decorator, add encapsulation as part of the object viewencapsul
 - invoke the httpClient in the constructor
 -advantage of setting up service file, eradability, easy to debug and maitain, no code duplication
 - we can set params to http req using the new HttpParam().set('name', 'value'), which is then pass as an object to the http method
+- we can attach headers to url similar to the way params are added new JttpHeaders().set('name', 'value')
 - we can subscribe to the observable by using the subscribe() in class or the |async in template
 
+
+## dependency injection
 
 
 
