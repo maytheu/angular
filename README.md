@@ -69,6 +69,9 @@ in the component decorator, add encapsulation as part of the object viewencapsul
 
 
 ## dependency injection
+- angular dependency is provided via the constructor
+- di helps to avoid component nesting creating angular di manually [see 46](https://www.udemy.com/course/angular-course/learn/lecture/12394616#overview)
+ 
 
 
 
