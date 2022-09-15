@@ -72,6 +72,13 @@ in the component decorator, add encapsulation as part of the object viewencapsul
 - angular dependency is provided via the constructor
 - di helps to avoid component nesting creating angular di manually [see 46](https://www.udemy.com/course/angular-course/learn/lecture/12394616#overview)
 - heirachy dependency injection is when provider aray are used in a component, in this case the provided in root objec is removed which make the service not to beahve as a singleton
+- we can also define program wide di using an object with the @injecttoken() and @inject in the constructor of the compontnt [here](https://www.udemy.com/course/angular-course/learn/lecture/12426680#overview), it is usefull when class can not be used as a di
+- @optional, @self occur if the service is not a singleton 
+- @optional() can be added to the class constructor beffore injectiong service for optional params
+@self() overdes the default behavior of di, it ensures that the di is only been injected by the class and not from other class component
+- @skipself() is the opp of @self(), it skip the class declaration and uses class from parent
+
+
  
 
 
