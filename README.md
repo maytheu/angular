@@ -80,9 +80,11 @@ in the component decorator, add encapsulation as part of the object viewencapsul
 
 
 ## Change detection cd
+cd is triggered by either @input() or observable 
 angular scan through the template and uodate data accordingly that is the default bahavior, t update the template even if it from the parent
 - onpush change detection - faster than the default detection, no update if parent is mutating the child, inorder to mutate the child component, a copy of the array  should be made, the onpush cd works only when the input of the child has change, it analyses changes basedonly of input of the child component
-
+- with onpush cd subscription to a memeber variable will not trigger cd but observable will trigeer cd, meanwhile the default will trigger cd
+- onpush cd is triggered when an input is change or async pipe on an obervable
  
 
 
