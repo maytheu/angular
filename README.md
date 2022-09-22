@@ -90,6 +90,37 @@ angular scan through the template and uodate data accordingly that is the defaul
 - doCheck() lifecycle also can be used to detect changes, we can use chngedetector ref in docheck lifecycle
  
 
+ ## lifecycle hooks
+ - liifecycle hooks is not meants to be called directely
+ ### Oninit()
+ - it is called once by angular
+ - constructor function is called before oninit
+ - input member varaible is populated in the oninit
+ - all initialization logic should be in the oninit
+
+### ondestroy()
+- called when component is destroyed
+- release all used resources here  e.g unsubscribing from observable
+- this is not needed if async pipe is used since async pipe closes all observable when destroyed
+
+### onchanges()
+- ngOnchanges() is called by angular whenever something changes, it is called b4 oninit, it can be triggeed when input changes, you can use onchange to check when value is changed
+
+### aftercontentcheck()
+- it is called after ngoninit
+ - this is called when all angular content is checkekdd
+ - it is called when angular detect any event
+ - it is called many time, for modifying data and not heavy usage
+
+ ### afterviewcheck()
+ - it is called aftercontentcheck
+ - it is called on every change detection
+ - pps cannot be mutatedd in the hook, since all have been check in aftercontentcheck
+
+ ### afterviewinit ,aftercontent init
+ - called once line oninit()
+ - initialize @viewchild() in afterview init
+  -  initialize @conteontchild() inafter content init()
 
 
 
