@@ -123,6 +123,18 @@ angular scan through the template and uodate data accordingly that is the defaul
   -  initialize @conteontchild() inafter content init()
 
 
+  ## angular modules
+  - is an organizational unit that groups, component, pipe, directives that are closely elated
+   - the @ngModules() which contains a list
+   - declaration is an array of component that are part of the module
+   - import defines the dependent module of the ngmodule, it is also an array
+   - providers - for services 
+   - boostrap - used to identify the root component
+   - export - array that contains what us visible outside the module
+
+   -ng g m [modulepath] to generate a new module
+
+
 
 ##  Angular Core Deep Dive (Video Course)
 
