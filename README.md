@@ -134,6 +134,13 @@ angular scan through the template and uodate data accordingly that is the defaul
 
    -ng g m [modulepath] to generate a new module
 
+## ANGULAR pipe
+- ng g pipe [directory name]
+- it should be added to the ngmodule
+- the class implements the pipetransform which has the transform()
+- | [pipename:'varaible']
+- pipe will only update when input changes not when data is mutated
+- pipe are pure but can be changed to impure with pure:false in the @pipe()
 
 
 ##  Angular Core Deep Dive (Video Course)
