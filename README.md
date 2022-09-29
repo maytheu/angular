@@ -1,140 +1,162 @@
-
-##  Note from the Angular Core Deep Dive (Video Course) from taken from angular university on udemy
+## Note from the Angular Core Deep Dive (Video Course) from taken from angular university on udemy
 
 # Local Template query
+
 ### @ViewChild()
+
 - @ViewChild(component|'') - accept the component to query or the template refrence using #
 - scope of the @viewChild() is only to the template and its component and not to deeper scope i.e child/parent component, we cant query down the heirachy tree
 - the data is first available in the ngAfterViewInit()
 
 ### @viewChildren()
+
 -similar to @viewChild(), but accept multiple children instread of one
 
 ### Life sycle hook
+
 - Afterviewinit() lifecycle is the initialization to access native elment with @viewChild()
+
 * avoid template changes in this life cycle
 
 ## content projection
-where a reuseable component have a dynamic child elemt, <ng-content> is used to load the dynamic child element from the parent component 
+
+where a reuseable component have a dynamic child elemt, <ng-content> is used to load the dynamic child element from the parent component
 
 <ng-content> is defined in the child component while the parent can now pass dynamic element which is projected by the child element
 
 we can also do partial projection of the child component using the select from <ng-content>
 
 ## @ContentChild()
+
 similar to @viewchid() can only view the content of a projected content, it is visible at the level of the parent component and not the reusable component
 similar to @viewchild() @contentchild() can be use to query template, component instance and native dom element
 
 ## @ContentChildren()\
+
 similar to @viewChildren() query multiple element as array, the ngAfterContentInit() is the guaranteed earliest lifecycle to get the content chidlren as oppose to @view childre where it is guaranteed at ngAfetrViewInit()
 
 ## ngIf directive
+
 it is used in angular template for displaying templates conditionally
 the else condtion is implemented in <ng-template> and a reference attached to it
 <ng-template> allow us to define block of isolated template
 <ng-template> block is not displayed by defalt
 
 ### ng-template
+
 ngTemplateOutlet is ussed to instantiate a <ng-template>
 private variable can be passed to<ng-template #ngTemplateref let-contextName='name'> by using a context from a parent component
+
 <div *ngTemplateOutlet='ngTemplateref' context={name:'name'}>
 
 ## Directives
-there are diff directive in angualar - structural(take *), attribute diretive- modifies html structure
+
+there are diff directive in angualar - structural(take \*), attribute diretive- modifies html structure
 we can create custome directive using the angula cli ng g d [file name]
 cos of the [] in directive selector, it means it a an attribute selector
 @HostBinding() can be use to manipulate css as '/directive/highlighted
-- strucureal directive also generated the same way, it is applied on the top of html template
-a destrcutured SD is similar to attribute dir in that it is in <ng-template [ngIf]> form but a shorthand form uses the *ngIf
-implenting sd is /directive/oppif
 
- ## View encapsulation v.e
+- strucureal directive also generated the same way, it is applied on the top of html template
+  a destrcutured SD is similar to attribute dir in that it is in <ng-template [ngIf]> form but a shorthand form uses the \*ngIf
+  implenting sd is /directive/oppif
+
+## View encapsulation v.e
+
 - angular utilizes view encapsulation for its style component, the component can accept array of style, each component has a unique identifier in the dom (special content attribute).
 - <ng-content> styles are exposed in the parent component
 - :host{} is used to target the whole template and not the content of the template, inspecting the dom, angular uses the nghost identifier
 - ::ng-deep is a way of bypassing v.e, it ensure that a unique identifier is not attach the particular selector, i.e css can be used anywhere and not particlar to a component
 - the default view encapsulation is the emulated, none - uses the regular css and view encapsulation do not work, shodomdom is similar to emulated view encapsulation but its browser api not of angular
-in the component decorator, add encapsulation as part of the object viewencapsulation.{consant}
-
+  in the component decorator, add encapsulation as part of the object viewencapsulation.{consant}
 
 ## Services
+
 - generate a service file using angular cli ng g s [servicepath]
 - when aservice is created the provided in makes only one instance of the service but makes it accessible to every component (application singleton)
 - import { HttpClientModule } from "@angular/common/http"; and add to import in module
 - invoke the httpClient in the constructor
--advantage of setting up service file, eradability, easy to debug and maitain, no code duplication
+  -advantage of setting up service file, eradability, easy to debug and maitain, no code duplication
 - we can set params to http req using the new HttpParam().set('name', 'value'), which is then pass as an object to the http method
 - we can attach headers to url similar to the way params are added new JttpHeaders().set('name', 'value')
 - we can subscribe to the observable by using the subscribe() in class or the |async in template
 
-
 ## dependency injection
+
 - angular dependency is provided via the constructor
 - di helps to avoid component nesting creating angular di manually [see 46](https://www.udemy.com/course/angular-course/learn/lecture/12394616#overview)
 - heirachy dependency injection is when provider aray are used in a component, in this case the provided in root objec is removed which make the service not to beahve as a singleton
 - we can also define program wide di using an object with the @injecttoken() and @inject in the constructor of the compontnt [here](https://www.udemy.com/course/angular-course/learn/lecture/12426680#overview), it is usefull when class can not be used as a di
-- @optional, @self occur if the service is not a singleton 
+- @optional, @self occur if the service is not a singleton
 - @optional() can be added to the class constructor beffore injectiong service for optional params
-@self() overdes the default behavior of di, it ensures that the di is only been injected by the class and not from other class component
+  @self() overdes the default behavior of di, it ensures that the di is only been injected by the class and not from other class component
 - @skipself() is the opp of @self(), it skip the class declaration and uses class from parent
 
-
 ## Change detection cd
-cd is triggered by either @input() or observable 
+
+cd is triggered by either @input() or observable
 angular scan through the template and uodate data accordingly that is the default bahavior, t update the template even if it from the parent
-- onpush change detection - faster than the default detection, no update if parent is mutating the child, inorder to mutate the child component, a copy of the array  should be made, the onpush cd works only when the input of the child has change, it analyses changes basedonly of input of the child component
+
+- onpush change detection - faster than the default detection, no update if parent is mutating the child, inorder to mutate the child component, a copy of the array should be made, the onpush cd works only when the input of the child has change, it analyses changes basedonly of input of the child component
 - with onpush cd subscription to a memeber variable will not trigger cd but observable will trigeer cd, meanwhile the default will trigger cd
 - onpush cd is triggered when an input is change or async pipe on an obervable
 - for input pps that do not change overtime,e.g string, we can declare it as an attribute instead in the child sonstructor as @Attribute('[input name]') private [input name]:type and then pass [input name] from parent, its neccesary for perfomance optimization
 - for manual cd, changedetectorref can be useed to notify template
 - doCheck() lifecycle also can be used to detect changes, we can use chngedetector ref in docheck lifecycle
- 
 
- ## lifecycle hooks
- - liifecycle hooks is not meants to be called directely
- ### Oninit()
- - it is called once by angular
- - constructor function is called before oninit
- - input member varaible is populated in the oninit
- - all initialization logic should be in the oninit
+## lifecycle hooks
+
+- liifecycle hooks is not meants to be called directely
+
+### Oninit()
+
+- it is called once by angular
+- constructor function is called before oninit
+- input member varaible is populated in the oninit
+- all initialization logic should be in the oninit
 
 ### ondestroy()
+
 - called when component is destroyed
-- release all used resources here  e.g unsubscribing from observable
+- release all used resources here e.g unsubscribing from observable
 - this is not needed if async pipe is used since async pipe closes all observable when destroyed
 
 ### onchanges()
+
 - ngOnchanges() is called by angular whenever something changes, it is called b4 oninit, it can be triggeed when input changes, you can use onchange to check when value is changed
 
 ### aftercontentcheck()
+
 - it is called after ngoninit
- - this is called when all angular content is checkekdd
- - it is called when angular detect any event
- - it is called many time, for modifying data and not heavy usage
+- this is called when all angular content is checkekdd
+- it is called when angular detect any event
+- it is called many time, for modifying data and not heavy usage
 
- ### afterviewcheck()
- - it is called aftercontentcheck
- - it is called on every change detection
- - pps cannot be mutatedd in the hook, since all have been check in aftercontentcheck
+### afterviewcheck()
 
- ### afterviewinit ,aftercontent init
- - called once line oninit()
- - initialize @viewchild() in afterview init
-  -  initialize @conteontchild() inafter content init()
+- it is called aftercontentcheck
+- it is called on every change detection
+- pps cannot be mutatedd in the hook, since all have been check in aftercontentcheck
 
+### afterviewinit ,aftercontent init
 
-  ## angular modules
-  - is an organizational unit that groups, component, pipe, directives that are closely elated
-   - the @ngModules() which contains a list
-   - declaration is an array of component that are part of the module
-   - import defines the dependent module of the ngmodule, it is also an array
-   - providers - for services 
-   - boostrap - used to identify the root component
-   - export - array that contains what us visible outside the module
+- called once line oninit()
+- initialize @viewchild() in afterview init
+- initialize @conteontchild() inafter content init()
 
-   -ng g m [modulepath] to generate a new module
+## angular modules
+
+- is an organizational unit that groups, component, pipe, directives that are closely elated
+- the @ngModules() which contains a list
+- declaration is an array of component that are part of the module
+- import defines the dependent module of the ngmodule, it is also an array
+- providers - for services
+- boostrap - used to identify the root component
+- export - array that contains what us visible outside the module
+
+-ng g m [modulepath] to generate a new module
 
 ## ANGULAR pipe
+
 - ng g pipe [directory name]
 - it should be added to the ngmodule
 - the class implements the pipetransform which has the transform()
@@ -142,8 +164,22 @@ angular scan through the template and uodate data accordingly that is the defaul
 - pipe will only update when input changes not when data is mutated
 - pipe are pure but can be changed to impure with pure:false in the @pipe()
 
+## Angular Internalization i18n
+- add i18n to a ttag to support internailzation
+- next use the cli to generate msg with `ng xi18n`
+- for each unique text, angular generate a unique id
+- i18n can also accept values like i18n="[content]|[description]"
+- pluralization is when dealing with diff (condition)[https://www.udemy.com/course/angular-course/learn/lecture/12469070#overview]
+- i18n select works in a sinilar way as ngswitch
+- to use translated file, create a folder locale in the src
+- messages.[locale].xlf for the language 
+- for each language translation add <target>[translation]</target>
+- angular.json in d configuration block
+- add the languages [supported](https://www.udemy.com/course/angular-course/learn/lecture/12469492#overview) 
 
-##  Angular Core Deep Dive (Video Course)
+
+
+## Angular Core Deep Dive (Video Course)
 
 This repository contains the code of the [Angular Core Deep Dive](https://angular-university.io/course/angular-course).
 
@@ -151,18 +187,15 @@ This course repository is updated to Angular v14:
 
 ![Angular Core Deep Dive](https://s3-us-west-1.amazonaws.com/angular-university/course-images/angular-core-in-depth-small.png)
 
-
 # Installation pre-requisites
 
 IMPORTANT: Please use Node 16 (Long Term Support version).
-
 
 # Installing the Angular CLI
 
 With the following command the angular-cli will be installed globally in your machine:
 
     npm install -g @angular/cli
-
 
 # How To install this repository
 
@@ -199,8 +232,6 @@ To run the frontend part of our code, we will use the Angular CLI:
 
 The application is visible at port 4200: [http://localhost:4200](http://localhost:4200)
 
-
-
 # Important
 
 This repository has multiple branches, have a look at the beginning of each section to see the name of the branch.
@@ -209,13 +240,13 @@ At certain points along the course, you will be asked to checkout other remote b
 
     git branch -a
 
-  The remote branches have their starting in origin, such as for example 1-navigation-and-containers.
+The remote branches have their starting in origin, such as for example 1-navigation-and-containers.
 
 We can checkout the remote branch and start tracking it with a local branch that has the same name, by using the following command:
 
       git checkout -b section-1 origin/1-navigation-and-containers
 
-It's also possible to download a ZIP file for a given branch,  using the branch dropdown on this page on the top left, and then selecting the Clone or Download / Download as ZIP button.
+It's also possible to download a ZIP file for a given branch, using the branch dropdown on this page on the top left, and then selecting the Clone or Download / Download as ZIP button.
 
 # Other Courses
 
@@ -225,14 +256,11 @@ If you are looking for the [RxJs In Practice Course](https://angular-university.
 
 ![RxJs In Practice Course](https://s3-us-west-1.amazonaws.com/angular-university/course-images/rxjs-in-practice-course.png)
 
-
 # NgRx In Depth Course
 
 If you are looking for the [NgRx In Depth Course](https://angular-university.io/course/angular-ngrx-course), the repo with the full code can be found here:
 
 ![NgRx In Depth Course](https://s3-us-west-1.amazonaws.com/angular-university/course-images/angular-ngrx-course.png)
-
-
 
 # Angular PWA Course
 
@@ -256,7 +284,6 @@ If you are looking for the Angular Advanced Course, the repo with the full code 
 
 ![Angular Advanced Library Laboratory Course: Build Your Own Library](https://angular-academy.s3.amazonaws.com/thumbnails/advanced_angular-small-v3.png)
 
-
 ## RxJs and Reactive Patterns Angular Architecture Course
 
 If you are looking for the RxJs and Reactive Patterns Angular Architecture Course code, the repo with the full code can be found here:
@@ -264,8 +291,6 @@ If you are looking for the RxJs and Reactive Patterns Angular Architecture Cours
 [RxJs and Reactive Patterns Angular Architecture Course](https://angular-university.io/course/reactive-angular-architecture-course)
 
 ![RxJs and Reactive Patterns Angular Architecture Course](https://s3-us-west-1.amazonaws.com/angular-academy/blog/images/rxjs-reactive-patterns-small.png)
-
-
 
 ## Angular Ngrx Reactive Extensions Architecture Course
 
@@ -277,8 +302,6 @@ If you are looking for the Angular Ngrx Reactive Extensions Architecture Course 
 
 ![Angular Ngrx Course](https://angular-academy.s3.amazonaws.com/thumbnails/ngrx-angular.png)
 
-
-
 ## Angular 2 and Firebase - Build a Web Application Course
 
 If you are looking for the Angular 2 and Firebase - Build a Web Application Course code, the repo with the full code can be found here:
@@ -289,7 +312,6 @@ If you are looking for the Angular 2 and Firebase - Build a Web Application Cour
 
 ![Angular firebase course](https://angular-academy.s3.amazonaws.com/thumbnails/angular_app-firebase-small.jpg)
 
-
 ## Complete Typescript 2 Course - Build A REST API
 
 If you are looking for the Complete Typescript 2 Course - Build a REST API, the repo with the full code can be found here:
@@ -299,4 +321,3 @@ If you are looking for the Complete Typescript 2 Course - Build a REST API, the 
 [Github repo for this course](https://github.com/angular-university/complete-typescript-course)
 
 ![Complete Typescript Course](https://angular-academy.s3.amazonaws.com/thumbnails/typescript-2-small.png)
-
