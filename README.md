@@ -178,6 +178,16 @@ angular scan through the template and uodate data accordingly that is the defaul
 - add the languages [supported](https://www.udemy.com/course/angular-course/learn/lecture/12469492#overview) 
 
 
+## Angular Element
+- is applicabele when u want to integrate angular app into another framework
+- geneate a nwe element with `ng add @angular/elements --project-name=[project name]`
+- generate theh new element with `ng g c [component name]`
+- create a custom element with createCustomElement([component name], {injector})
+- customElements.define('css-tag', [customElement])
+- add [component name] to entrycomponent in ngmodle of app
+https://www.udemy.com/course/angular-course/learn/lecture/12469782#overview
+
+
 
 ## Angular Core Deep Dive (Video Course)
 
